@@ -20,7 +20,7 @@
                     <figure>
                         <img height="200px" width="200px"  :src="subject1.img" alt="">
                     </figure>
-                    <button class="btn btn-info"v-if="canAddToCart" v-on:click="addToCart">
+                    <button class="btn btn-success"v-if="canAddToCart" v-on:click="addToCart">
                         <span ><i class="fas fa-cart-plus"></i></span>
                          Add to Cart
                          ({{cartItemCount}}) 
@@ -36,12 +36,52 @@
                     <p class="total-price">Total price: {{subject1.totalPrice}}£</p>
                 </div>
              </div>
+             <div class="row col-lg-12  container" id="checkout">
+                <div class="col-lg-6 m-auto">
+                    <h3>Check out page</h3>
+
+                    <div class="form-group">
+                        <label for="firstName">First Name:
+                            <input v-model="student.firstName"type="text">
+                       </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name:
+                            <input v-model="student.lastName"type="text">
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age:
+                            <input v-model="student.age"type="number">
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="year">Year of study:
+                            <input v-model="student.year"type="number">
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h3>Order Summary</h3>
+                    <p>Name: {{student.firstName}} {{student.lastName}} </p>
+                    <p>Age: {{student.age}}</p>
+                    <p>Year of study: {{student.year}} </p>
+                    <p>total price</p>
+                    <button class="btn btn-info">Place order</button>
+                </div>
+             </div>
         </div>
         <script>
             var lessonList = new Vue({  //creating vue instance
 
                 el:"#lessons",
-                data:{ 
+                data:{
+                    student:{
+                        firstName:"",
+                        secondName:"",
+                        age:"",
+                        year:""
+                    }, 
                     subject1:{
                         id:'1',
                         subject:'IT',
