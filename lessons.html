@@ -4,54 +4,150 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>After School Club</title>
+        <title>Lesson shop</title>
+        <link rel="stylesheet" href="./public/styles/lessons.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" >
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" >
         <script src="https://unpkg.com/vue"></script>
         
     </head>
     <body>
-        <div id="app">
-            <div class="row container">
-                <h1>After School Club</h1>
-                <hr></hr>
-                <div class="col-lg-6 row m-auto">
+        <div id="lessons">
+            <h1>List of lessons</h1>
+            <hr></hr>
+            <div class=" col-lg-4 row container">
+                <div class="col-lg-6  m-auto">
                     <figure>
-                        <img height="300px" width="300px"  :src="subjectObj.img2" alt="">
+                        <img height="200px" width="200px"  :src="subject1.img" alt="">
                     </figure>
-                    <button v-if="canAddToCart" style="max-width:50%; margin-left: 8px;" v-on:click="addToCart">
+                    <button class="btn btn-info"v-if="canAddToCart" v-on:click="addToCart">
                         <span ><i class="fas fa-cart-plus"></i></span>
                          Add to Cart
-                         ({{cartItemCount}})
+                         ({{cartItemCount}}) 
                     </button>
-                    <button style="max-width:50%; margin-left: 8px;" disabled = "disabled" v-else>Out of stock</button>
+                    <button class="btn btn-secondary    btn-disabled" v-else>Out of space</button>
                 </div>
 
-                <div class="col-lg-6 m-auto ">
-                    <h1 v-text=' subject'></h1>
-                    <h2>Location: {{location}}</h2>
-                    <h3 v-text='price'></h3>
+                <div class="col-lg-6  ">
+                    <h2 class="subject"><i class="fas fa-book-open"></i>  {{subject1.subject}}</h2>
+                    <i class="fas fa-map-pin"></i><span class="location" v-text='subject1.location' ></span>
+                    <p class="price">Price for one space: {{subject1.price}}£</p>
+                    <p class="av-space">Available space: {{subject1.showSpace}}</p>
+                    <p class="total-price">Total price: {{subject1.totalPrice}}£</p>
                 </div>
              </div>
         </div>
         <script>
-            var schoolClub = new Vue({
+            var lessonList = new Vue({  //creating vue instance
 
-                el:"#app",
-                data:{
-                    id:'1',
-                    subject:'IT',
-                    location:'Hendon',
-                    price:'1000',
-                    img:'room1.jpg',
-                    subjectObj:{
-                        img2:'room1.jpg',
-                        stock: 5,
+                el:"#lessons",
+                data:{ 
+                    subject1:{
+                        id:'1',
+                        subject:'IT',
+                        location:'Hendon',
+                        price:1000,
+                        img:'public/img/image1.jpeg',
+                        space: 5,
+                        showSpace:5,
+                        totalPrice:0,
                     },
+                    subject2:{
+                        id:'1',
+                        subject:'IT',
+                        location:'Hendon',
+                        price:1000,
+                        img:'public/img/image1.jpeg',
+                        space: 5,
+                        showSpace:5,
+                        totalPrice:0,
+                    }, 
+                    subject3:{
+                        id:'1',
+                        subject:'IT',
+                        location:'Hendon',
+                        price:1000,
+                        img:'public/img/image1.jpeg',
+                        space: 5,
+                        showSpace:5,
+                        totalPrice:0,
+                    }, 
+                    subject4:{
+                        id:'1',
+                        subject:'IT',
+                        location:'Hendon',
+                        price:1000,
+                        img:'public/img/image1.jpeg',
+                        space: 5,
+                        showSpace:5,
+                        totalPrice:0,
+                    }, 
+                    subject5:{
+                        id:'1',
+                        subject:'IT',
+                        location:'Hendon',
+                        price:1000,
+                        img:'public/img/image1.jpeg',
+                        space: 5,
+                        showSpace:5,
+                        totalPrice:0,
+                    }, 
+                    subject6:{
+                        id:'1',
+                        subject:'IT',
+                        location:'Hendon',
+                        price:1000,
+                        img:'public/img/image1.jpeg',
+                        space: 5,
+                        showSpace:5,
+                        totalPrice:0,
+                    }, 
+                    subject7:{
+                        id:'1',
+                        subject:'IT',
+                        location:'Hendon',
+                        price:1000,
+                        img:'public/img/image1.jpeg',
+                        space: 5,
+                        showSpace:5,
+                        totalPrice:0,
+                    }, 
+                    subject8:{
+                        id:'1',
+                        subject:'IT',
+                        location:'Hendon',
+                        price:1000,
+                        img:'public/img/image1.jpeg',
+                        space: 5,
+                        showSpace:5,
+                        totalPrice:0,
+                    }, 
+                    subject9:{
+                        id:'1',
+                        subject:'IT',
+                        location:'Hendon',
+                        price:1000,
+                        img:'public/img/image1.jpeg',
+                        space: 5,
+                        showSpace:5,
+                        totalPrice:0,
+                    },
+                    subject10:{
+                        id:'1',
+                        subject:'IT',
+                        location:'Hendon',
+                        price:1000,
+                        img:'public/img/image1.jpeg',
+                        space: 5,
+                        showSpace:5,
+                        totalPrice:0,
+                    },                     
                     cart:[],
                 },
-                methods: {
+                methods: {  //creating method for adding to cart
                     addToCart: function () {
+                        this.subject1.showSpace--;
+                        this.subject1.totalPrice+=this.subject1.price;
                         this.cart.push(this.id);
                     }
                     
@@ -62,7 +158,7 @@
                         return this.cart.length || '';
                     },
                     canAddToCart: function() {
-                        return this.subjectObj.stock > this.cartItemCount;
+                        return this.subject1.space > this.cartItemCount;
                     }
                 },
          
