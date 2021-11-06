@@ -14,191 +14,304 @@
     <body>
         <div id="lessons">
             <h1>List of lessons</h1>
+            <button @click="openCheckout" v-if="cartItemCount" id="checkoutButton"  class="btn btn-primary">Proceed to shopping cart</button>
+            <button v-else class="btn btn-disabled btn-secondary">Shopping cart empty</button>
             <hr></hr>
-            <div class=" col-lg-4 row container">
+            <div id="lessonList" class="row">
+            <div v-for="(subject, key) in subjects" class=" col-lg-4 row container">
                 <div class="col-lg-6  m-auto">
                     <figure>
-                        <img height="200px" width="200px"  :src="subject1.img" alt="">
+                        <img height="200px" width="200px"  :src="subject.img" alt="">
                     </figure>
-                    <button class="btn btn-success"v-if="canAddToCart" v-on:click="addToCart">
+                    <!-- <button class="btn btn-success" @click="addToCart(subject.id)"> -->
+                    <button class="btn btn-success" v-if="canAddToCart(subject.id)" @click="addToCart(subject.id)">
                         <span ><i class="fas fa-cart-plus"></i></span>
-                         Add to Cart
-                         ({{cartItemCount}}) 
+                         Add to Cart ({{subject.countItemsInCart}})
                     </button>
-                    <button class="btn btn-secondary    btn-disabled" v-else>Out of space</button>
+                    <button class="btn btn-secondary btn-disabled" v-else>Out of space</button>
                 </div>
 
                 <div class="col-lg-6  ">
-                    <h2 class="subject"><i class="fas fa-book-open"></i>  {{subject1.subject}}</h2>
-                    <i class="fas fa-map-pin"></i><span class="location" v-text='subject1.location' ></span>
-                    <p class="price">Price for one space: {{subject1.price}}£</p>
-                    <p class="av-space">Available space: {{subject1.showSpace}}</p>
-                    <p class="total-price">Total price: {{subject1.totalPrice}}£</p>
+                    <h2 class="subject"><i class="fas fa-book-open"></i>  {{subject.subject}}</h2>
+                    <i class="fas fa-map-pin"></i><span class="location" v-text='subject.location' ></span>
+                    <p class="price">Price for one space: {{subject.price}}£</p>
+                    <p class="av-space">Available space: {{subject.showSpace}}</p>
+                    <p class="total-price">Total price: {{subject.totalPrice}}£</p>
                 </div>
              </div>
-             <div class="row col-lg-12  container" id="checkout">
-                <div class="col-lg-6 m-auto">
-                    <h3>Check out page</h3>
+            </div>
 
-                    <div class="form-group">
-                        <label for="firstName">First Name:
-                            <input v-model="student.firstName"type="text">
-                       </label>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Last Name:
-                            <input v-model="student.lastName"type="text">
+            <form action="">
+
+                <div class="row col-lg-12  container" id="checkout">
+                    <div class="col-lg-4">
+                        <h3>Check out page</h3>
+                        ({{cartItemCount-1}})
+                        <div class="form-group">
+                            <label for="firstName">First Name:
+                                <input required v-model="order.firstName"type="text">
                         </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name:
+                                <input required v-model="order.lastName"type="text">
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone:
+                                <input required v-model="order.phone"type="number">
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Year of study:
+                                <select v-model="order.year">
+                                    <option value="">-</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                </select>
+                                <!-- <input v-model="order.year"type="number"> -->
+                            </label>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label for="gift">gift?
+                                <input type="checkbox" v-model="order" value="false"v-bind:true-value="order.isGift" v-bind:false-value="order.isNotGift">
+                            </label>
+                        </div> -->
                     </div>
-                    <div class="form-group">
-                        <label for="age">Age:
-                            <input v-model="student.age"type="number">
-                        </label>
+                    <div class="col-lg-4">
+                        <h3>Order Summary</h3>
+                        <p>Name: {{order.firstName}} {{order.lastName}} </p>
+                        <p>Phone: {{order.phone}}</p>
+                        <p>Year of study: {{order.year}} </p>
+
+                        <p>total price</p>
+                        <button @click="placeOrder" type="submit" class="btn btn-info">Place order</button>
                     </div>
-                    <div class="form-group">
-                        <label for="year">Year of study:
-                            <input v-model="student.year"type="number">
-                        </label>
+                    <div class="col-lg-4">
+                        <h3>Order List</h3>
+                        <div v-for="(cartItem, key) in cart" >
+                            <p>{{subjects[cartItem].subject}} 
+                                <a @click="removeFromCart(subjects[cartItem].id,key)" class="btn btn-danger">Remove</a>
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <h3>Order Summary</h3>
-                    <p>Name: {{student.firstName}} {{student.lastName}} </p>
-                    <p>Age: {{student.age}}</p>
-                    <p>Year of study: {{student.year}} </p>
-                    <p>total price</p>
-                    <button class="btn btn-info">Place order</button>
-                </div>
-             </div>
+             </form>
         </div>
         <script>
             var lessonList = new Vue({  //creating vue instance
 
                 el:"#lessons",
                 data:{
-                    student:{
+                    showCheckout:false,
+                    order:{
                         firstName:"",
                         secondName:"",
-                        age:"",
-                        year:""
-                    }, 
-                    subject1:{
-                        id:'1',
-                        subject:'IT',
-                        location:'Hendon',
-                        price:1000,
-                        img:'public/img/image1.jpeg',
-                        space: 5,
-                        showSpace:5,
-                        totalPrice:0,
+                        phone:"",
+                        year:"",
+                        isGift:"Purchase as a gift",
+                        isNotGift:"Purchase for yourself",
                     },
-                    subject2:{
-                        id:'1',
-                        subject:'IT',
-                        location:'Hendon',
-                        price:1000,
-                        img:'public/img/image1.jpeg',
-                        space: 5,
-                        showSpace:5,
-                        totalPrice:0,
-                    }, 
-                    subject3:{
-                        id:'1',
-                        subject:'IT',
-                        location:'Hendon',
-                        price:1000,
-                        img:'public/img/image1.jpeg',
-                        space: 5,
-                        showSpace:5,
-                        totalPrice:0,
-                    }, 
-                    subject4:{
-                        id:'1',
-                        subject:'IT',
-                        location:'Hendon',
-                        price:1000,
-                        img:'public/img/image1.jpeg',
-                        space: 5,
-                        showSpace:5,
-                        totalPrice:0,
-                    }, 
-                    subject5:{
-                        id:'1',
-                        subject:'IT',
-                        location:'Hendon',
-                        price:1000,
-                        img:'public/img/image1.jpeg',
-                        space: 5,
-                        showSpace:5,
-                        totalPrice:0,
-                    }, 
-                    subject6:{
-                        id:'1',
-                        subject:'IT',
-                        location:'Hendon',
-                        price:1000,
-                        img:'public/img/image1.jpeg',
-                        space: 5,
-                        showSpace:5,
-                        totalPrice:0,
-                    }, 
-                    subject7:{
-                        id:'1',
-                        subject:'IT',
-                        location:'Hendon',
-                        price:1000,
-                        img:'public/img/image1.jpeg',
-                        space: 5,
-                        showSpace:5,
-                        totalPrice:0,
-                    }, 
-                    subject8:{
-                        id:'1',
-                        subject:'IT',
-                        location:'Hendon',
-                        price:1000,
-                        img:'public/img/image1.jpeg',
-                        space: 5,
-                        showSpace:5,
-                        totalPrice:0,
-                    }, 
-                    subject9:{
-                        id:'1',
-                        subject:'IT',
-                        location:'Hendon',
-                        price:1000,
-                        img:'public/img/image1.jpeg',
-                        space: 5,
-                        showSpace:5,
-                        totalPrice:0,
-                    },
-                    subject10:{
-                        id:'1',
-                        subject:'IT',
-                        location:'Hendon',
-                        price:1000,
-                        img:'public/img/image1.jpeg',
-                        space: 5,
-                        showSpace:5,
-                        totalPrice:0,
-                    },                     
+                    subjects:[ 
+                        {
+                            id:'0',
+                            subject:'IT',
+                            location:'Hendon',
+                            price:1000,
+                            img:'public/img/image1.jpeg',
+                            space: 5,
+                            showSpace:5,
+                            countItemsInCart:0,
+                            available:true,
+                            totalPrice:0,
+                        },
+                        {
+                            id:'1',
+                            subject:'Maths',
+                            location:'Hendon',
+                            price:1000,
+                            img:'public/img/image1.jpeg',
+                            space: 5,
+                            showSpace:5,
+                            countItemsInCart:0,
+                            available:true,
+                            totalPrice:0,
+                        }, 
+                        {
+                            id:'2',
+                            subject:'History',
+                            location:'Hendon',
+                            price:1000,
+                            img:'public/img/image1.jpeg',
+                            space: 5,
+                            showSpace:5,
+                            countItemsInCart:0,
+                            available:true,
+                            totalPrice:0,
+                        }, 
+                        {
+                            id:'3',
+                            subject:'Arts',
+                            location:'Hendon',
+                            price:1000,
+                            img:'public/img/image1.jpeg',
+                            space: 5,
+                            showSpace:5,
+                            countItemsInCart:0,
+                            available:true,
+                            totalPrice:0,
+                        }, 
+                        {
+                            id:'4',
+                            subject:'Dance',
+                            location:'Hendon',
+                            price:1000,
+                            img:'public/img/image1.jpeg',
+                            space: 5,
+                            showSpace:5,
+                            countItemsInCart:0,
+                            available:true,
+                            totalPrice:0,
+                        }, 
+                        {
+                            id:'5',
+                            subject:'Graphics',
+                            location:'Hendon',
+                            price:1000,
+                            img:'public/img/image1.jpeg',
+                            space: 5,
+                            showSpace:5,
+                            countItemsInCart:0,
+                            available:true,
+                            totalPrice:0,
+                        }, 
+                        {
+                            id:'6',
+                            subject:'Game dev',
+                            location:'Hendon',
+                            price:1000,
+                            img:'public/img/image1.jpeg',
+                            space: 5,
+                            showSpace:5,
+                            countItemsInCart:0,
+                            available:true,
+                            totalPrice:0,
+                        }, 
+                        {
+                            id:'7',
+                            subject:'Politics',
+                            location:'Hendon',
+                            price:1000,
+                            img:'public/img/image1.jpeg',
+                            space: 5,
+                            showSpace:5,
+                            countItemsInCart:0,
+                            available:true,
+                            totalPrice:0,
+                        }, 
+                        {
+                            id:'8',
+                            subject:'Economics',
+                            location:'Hendon',
+                            price:1000,
+                            img:'public/img/image1.jpeg',
+                            space: 5,
+                            showSpace:5,
+                            countItemsInCart:0,
+                            available:true,
+                            totalPrice:0,
+                        },
+                        {
+                            id:'9',
+                            subject:'Geography',
+                            location:'Hendon',
+                            price:1000,
+                            img:'public/img/image1.jpeg',
+                            space: 0,
+                            showSpace:0,
+                            countItemsInCart:0,
+                            available:false,
+                            totalPrice:0,
+                        },
+                    ],                     
                     cart:[],
                 },
                 methods: {  //creating method for adding to cart
-                    addToCart: function () {
-                        this.subject1.showSpace--;
-                        this.subject1.totalPrice+=this.subject1.price;
-                        this.cart.push(this.id);
-                    }
+                    addToCart(subjectId) {
+                        this.subjects.forEach(subject => {
+                            if(subject.id == subjectId && subject.space > subject.countItemsInCart){
+                                subject.showSpace--;
+                                subject.totalPrice+=subject.price;
+                                subject.countItemsInCart++;
+                                subject.available = true;
+                                this.cart.push(subject.id);
+                            }
+                            else{
+                                subject.available = false;
+                            }
+
+                        });
+                    },
+                    removeFromCart(subjectId,key){
+                        console.log(subjectId);
+                        this.subjects.forEach(subject => {
+                            if(subject.id == subjectId ){
+                                subject.showSpace++;
+                                subject.totalPrice-=subject.price;
+                                subject.countItemsInCart--;
+                                //key represent iteration cart position of the item simple fix
+                                this.cart.splice(key,1) 
+                            }
+                    
+                         });
+                    },
+
+                    canAddToCart(subjectId){
+                        for (let i = 0; i < this.subjects.length; i++) {
+                            if(this.subjects[i].id == subjectId && this.subjects[i].space > 0){
+                                return this.subjects[i].space >this.subjects[i].countItemsInCart;
+
+                            }
+                        }
+                    },
+                    openCheckout: () => {
+                        let checkoutBtn = document.querySelector('#checkoutButton');
+                        let lessonList = document.querySelector('#lessonList');
+                        let checkoutSection = document.querySelector('#checkout');
+                        if(checkoutBtn.innerHTML != "Back to the list of lessons"){
+                            lessonList.style.display = "none";
+                            checkoutSection.style.display = "inline-flex";
+                            checkoutBtn.innerHTML = "Back to the list of lessons";
+                        }
+                        else{
+                            lessonList.style.display = "inline-flex";
+                            checkoutSection.style.display = "none";
+                            checkoutBtn.innerHTML = "Proceed to shopping cart";
+                        }
+                    },
+                    placeOrder: (e) => { 
+                        if (this.order.firstName && this.order.lastName && this.order.phone) {
+                            alert('Order succesfully placed!')
+                            // window.location.reload()
+
+                        }
+                        e.preventDefault();
+
+                }
                     
                 },
                 computed: { // the Computed Property object
-                    cartItemCount: function() { // the propety name
+                    
+                    cartItemCount:function() { // the propety name
                     // its value is calculated when it is called
-                        return this.cart.length || '';
+                        return this.cart.length+1 || '';
                     },
-                    canAddToCart: function() {
-                        return this.subject1.space > this.cartItemCount;
+                    checkInputs: ()=>{
+                        return true;
                     }
                 },
          
