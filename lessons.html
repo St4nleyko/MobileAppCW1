@@ -14,8 +14,10 @@
     <body>
         <div id="lessons">
             <h1>List of lessons</h1>
-            <button @click="openCheckout" v-if="cartItemCount" id="checkoutButton"  class="btn btn-primary">Proceed to shopping cart</button>
-            <button v-else class="btn btn-disabled btn-secondary">Shopping cart empty</button>
+            <div class="row">
+                <button @click="openCheckout" v-if="cartItemCount" id="checkoutButton"  class="btn col-lg-2 btn-primary">Proceed to shopping cart</button>
+                <button @click="openList" v-else id="emptyCartBtn" class="btn col-lg-2 btn-disabled btn-secondary">Shopping cart empty</button>   
+            </div>
             <hr></hr>
             <div id="lessonList" class="row">
             <div v-for="(subject, key) in subjects" class=" col-lg-4 row container">
@@ -23,7 +25,6 @@
                     <figure>
                         <img height="200px" width="200px"  :src="subject.img" alt="">
                     </figure>
-                    <!-- <button class="btn btn-success" @click="addToCart(subject.id)"> -->
                     <button class="btn btn-success" v-if="canAddToCart(subject.id)" @click="addToCart(subject.id)">
                         <span ><i class="fas fa-cart-plus"></i></span>
                          Add to Cart ({{subject.countItemsInCart}})
@@ -46,7 +47,7 @@
                 <div class="row col-lg-12  container" id="checkout">
                     <div class="col-lg-4">
                         <h3>Check out page</h3>
-                        ({{cartItemCount-1}})
+                        <span id="cartCount">({{cartItemCount}})</span>
                         <div class="form-group">
                             <label for="firstName">First Name:
                                 <input required v-model="order.firstName"type="text">
@@ -59,7 +60,7 @@
                         </div>
                         <div class="form-group">
                             <label for="phone">Phone:
-                                <input required v-model="order.phone"type="number">
+                                <input required v-model="order.phone"type="text">
                             </label>
                         </div>
                         <div class="form-group">
@@ -257,7 +258,6 @@
                         });
                     },
                     removeFromCart(subjectId,key){
-                        console.log(subjectId);
                         this.subjects.forEach(subject => {
                             if(subject.id == subjectId ){
                                 subject.showSpace++;
@@ -278,10 +278,14 @@
                             }
                         }
                     },
+                    openList:() =>{
+                        window.location.reload()
+                    },
                     openCheckout: () => {
                         let checkoutBtn = document.querySelector('#checkoutButton');
                         let lessonList = document.querySelector('#lessonList');
                         let checkoutSection = document.querySelector('#checkout');
+
                         if(checkoutBtn.innerHTML != "Back to the list of lessons"){
                             lessonList.style.display = "none";
                             checkoutSection.style.display = "inline-flex";
@@ -305,11 +309,23 @@
                     
                 },
                 computed: { // the Computed Property object
-                    
+                    // cartCheck:function() {
+                    //     let checkoutBtn = document.querySelector('#checkoutButton');
+
+                    //     if (this.cart.length < 1 && checkoutBtn.innerHTML == "Back to the list of lessons"){
+                    //         checkoutBtn.innerHTML="Proceed to shopping cart";
+                    //         checkoutBtn.style.display = "none";
+                    //         return true;
+                    //     }
+                    //     else{
+                    //         return false;
+                    //     }
+                    // },
                     cartItemCount:function() { // the propety name
                     // its value is calculated when it is called
-                        return this.cart.length+1 || '';
+                        return this.cart.length || '';
                     },
+
                     checkInputs: ()=>{
                         return true;
                     }
