@@ -20,12 +20,17 @@
                 <button @click="openList" v-else id="emptyCartBtn" class="btn col-lg-2 btn-disabled btn-secondary">Shopping cart empty</button>   
             </div>
             <hr></hr>
-            <div id="sortDiv">Sort by space
-                <button @click="sortBySpace" class="btn btn-warning" id="sortBtn" >Ascending</button>
-                <input type="text" v-model="searchSubject" placeholder="Search">
-                </input>
-                <div>
-                    <span class="autocomplete" v-for="subject in autocomplete">{{subject.subject}}|{{subject.location}}</br></span>
+            <div class="row" id="sortDiv">
+                <h6 class="col-lg-1">Sort by space</h6>
+                <div class="col-lg-1">
+                    <button  @click="sortBySpace" class="btn btn-warning" id="sortBtn" >Ascending</button>
+                </div>
+                
+                <div class="searchDiv col-lg-1">
+                    <input type="text" v-model="searchSubject" placeholder="Search">
+                    <div class="autocompleteDiv">
+                        <span class="autocomplete" v-for="subject in autocomplete">{{subject.subject}}|{{subject.location}}</br></span>
+                    </div>
                 </div>
             </div>
              </br>
@@ -53,28 +58,7 @@
                  </div>
                 </div>
     
-            <!-- <div v-else id="lessonList" class="row">
-            <div id="productBox"  v-for="(subject, key) in subjects" class=" col-lg-4 row container lesson">
-                <div class="col-lg-6  m-auto">
-                    <figure>
-                        <img height="200px" width="200px"  :src="subject.img" alt="">
-                    </figure>
-                    <button class="btn btn-success" v-if="canAddToCart(subject.id)" @click="addToCart(subject.id)">
-                        <span ><i class="fas fa-cart-plus"></i></span>
-                         Add to Cart ({{subject.countItemsInCart}})
-                    </button>
-                    <button class="btn btn-secondary btn-disabled" v-else>Out of space</button>
-                </div>
 
-                <div class="col-lg-6  ">
-                    <h2 class="subject"><i class="fas fa-book-open"></i>  {{subject.subject}} </h2>
-                    <i class="fas fa-map-pin"></i><span class="location" v-text='subject.location' ></span>
-                    <p class="price">Price for one space: {{subject.price}}£</p>
-                    <p class="av-space">Available space: {{subject.showSpace}}</p>
-                    <p class="total-price">Total price: {{subject.totalPrice}}£</p>
-                </div>
-             </div>
-            </div> -->
 
             <!-- //checkoutPage -->
             <form action="">

@@ -15,3 +15,14 @@
 #lessonListS{
     width: 100%;
 }
+.autocompleteDiv{
+    border: 1px solid;
+    width: 188.5px;
+}
+.autocompleteDiv span{
+    cursor:pointer;
+}
+.autocompleteDiv span:hover{
+    color:lightblue;
+}
+
