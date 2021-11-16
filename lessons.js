@@ -14,7 +14,7 @@ subjects = [
     {
         id:'1',
         subject:'Maths',
-        location:'Hendon',
+        location:'London',
         price:1000,
         img:'public/img/image1.jpeg',
         space: 1,
@@ -26,7 +26,7 @@ subjects = [
     {
         id:'2',
         subject:'History',
-        location:'Hendon',
+        location:'Madrid',
         price:1000,
         img:'public/img/image1.jpeg',
         space: 5,
@@ -38,7 +38,7 @@ subjects = [
     {
         id:'3',
         subject:'Arts',
-        location:'Hendon',
+        location:'Bratislava',
         price:1000,
         img:'public/img/image1.jpeg',
         space: 6,
@@ -50,7 +50,7 @@ subjects = [
     {
         id:'4',
         subject:'Dance',
-        location:'Hendon',
+        location:'Prague',
         price:1000,
         img:'public/img/image1.jpeg',
         space: 3,
@@ -62,7 +62,7 @@ subjects = [
     {
         id:'5',
         subject:'Graphics',
-        location:'Hendon',
+        location:'Dubai',
         price:1000,
         img:'public/img/image1.jpeg',
         space: 12,
@@ -74,7 +74,7 @@ subjects = [
     {
         id:'6',
         subject:'Game dev',
-        location:'Hendon',
+        location:'New York',
         price:1000,
         img:'public/img/image1.jpeg',
         space: 1,
@@ -86,7 +86,7 @@ subjects = [
     {
         id:'7',
         subject:'Politics',
-        location:'Hendon',
+        location:'Manchester',
         price:1000,
         img:'public/img/image1.jpeg',
         space: 5,
@@ -98,7 +98,7 @@ subjects = [
     {
         id:'8',
         subject:'Economics',
-        location:'Hendon',
+        location:'Moscow',
         price:1000,
         img:'public/img/image1.jpeg',
         space: 5,
@@ -110,7 +110,7 @@ subjects = [
     {
         id:'9',
         subject:'Geography',
-        location:'Hendon',
+        location:'Helsinki',
         price:1000,
         img:'public/img/image1.jpeg',
         space: 0,

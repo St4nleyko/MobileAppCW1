@@ -21,11 +21,40 @@
             </div>
             <hr></hr>
             <div id="sortDiv">Sort by space
-                <button @click="sortBySpace" class="btn btn-warning"id="sortBtn" >Ascending</button>
+                <button @click="sortBySpace" class="btn btn-warning" id="sortBtn" >Ascending</button>
+                <input type="text" v-model="searchSubject" placeholder="Search">
+                </input>
+                <div>
+                    <span class="autocomplete" v-for="subject in autocomplete">{{subject.subject}}|{{subject.location}}</br></span>
+                </div>
             </div>
              </br>
-            <div id="lessonList" class="row">
-            <div id="productBox"v-for="(subject, key) in subjects" class=" col-lg-4 row container lesson">
+
+             <div v-if="filterSearch" id="lessonListS" class="row">
+                <div id="productBox" v-for="subject in filterSearch" class=" col-lg-4 row container lesson">
+                    <div class="col-lg-6  m-auto">
+                        <figure>
+                            <img height="200px" width="200px"  :src="subject.img" alt="">
+                        </figure>
+                        <button class="btn btn-success" v-if="canAddToCart(subject.id)" @click="addToCart(subject.id)">
+                            <span ><i class="fas fa-cart-plus"></i></span>
+                             Add to Cart ({{subject.countItemsInCart}})
+                        </button>
+                        <button class="btn btn-secondary btn-disabled" v-else>Out of space</button>
+                    </div>
+    
+                    <div class="col-lg-6  ">
+                        <h2 class="subject"><i class="fas fa-book-open"></i>  {{subject.subject}}</h2>
+                        <i class="fas fa-map-pin"></i><span class="location" v-text='subject.location' ></span>
+                        <p class="price">Price for one space: {{subject.price}}£</p>
+                        <p class="av-space">Available space: {{subject.showSpace}}</p>
+                        <p class="total-price">Total price: {{subject.totalPrice}}£</p>
+                    </div>
+                 </div>
+                </div>
+    
+            <!-- <div v-else id="lessonList" class="row">
+            <div id="productBox"  v-for="(subject, key) in subjects" class=" col-lg-4 row container lesson">
                 <div class="col-lg-6  m-auto">
                     <figure>
                         <img height="200px" width="200px"  :src="subject.img" alt="">
@@ -38,14 +67,14 @@
                 </div>
 
                 <div class="col-lg-6  ">
-                    <h2 class="subject"><i class="fas fa-book-open"></i>  {{subject.subject}}</h2>
+                    <h2 class="subject"><i class="fas fa-book-open"></i>  {{subject.subject}} </h2>
                     <i class="fas fa-map-pin"></i><span class="location" v-text='subject.location' ></span>
                     <p class="price">Price for one space: {{subject.price}}£</p>
                     <p class="av-space">Available space: {{subject.showSpace}}</p>
                     <p class="total-price">Total price: {{subject.totalPrice}}£</p>
                 </div>
              </div>
-            </div>
+            </div> -->
 
             <!-- //checkoutPage -->
             <form action="">
@@ -118,7 +147,8 @@
                         isGift:"Purchase as a gift",
                         isNotGift:"Purchase for yourself",
                     },
-                    subjects:subjects,       
+                    subjects:subjects,
+                    searchSubject:'',       
                     cart:[],
                 },
                 methods: {  //creating method for adding to cart
@@ -177,7 +207,7 @@
                     },
                     openCheckout: () => {
                         let checkoutBtn = document.querySelector('#checkoutButton');
-                        let lessonList = document.querySelector('#lessonList');
+                        let lessonList = document.querySelector('#lessonListS');
                         let checkoutSection = document.querySelector('#checkout');
                         let sortDiv = document.querySelector('#sortDiv');
 
@@ -195,7 +225,7 @@
                         }
                     },
                     placeOrder: (e) => { 
-                        // alert('Order succesfully placed!')
+                        alert('Order succesfully placed!')
                         e.preventDefault();
 
                 }
@@ -217,11 +247,30 @@
                     // its value is calculated when it is called
                         return this.cart.length || '';
                     },
-
+                    filterSearch() {
+                        return this.subjects.filter( subject => {
+                            if(this.searchSubject != ''){
+                                // lessonList.style.display = "none";
+                                return !this.searchSubject || subject.subject.toLowerCase().indexOf(this.searchSubject.toLowerCase()) > -1 ||
+                                 subject.location.toLowerCase().indexOf(this.searchSubject.toLowerCase()) > -1                         }
+                            if(this.searchSubject == ''){
+                                return true;
+                            }
+                        })
+                    },
+                    autocomplete() {
+                        return this.subjects.filter( subject => {
+                            if(this.searchSubject != ''){
+                                return (!this.searchSubject || subject.subject.toLowerCase().indexOf(this.searchSubject.toLowerCase()) > -1)
+                                ||subject.location.toLowerCase().indexOf(this.searchSubject.toLowerCase()) > -1  
+                            }
+                            else{
+                                return "";
+                            }
+                    })
+                    }
                 },
-         
-
-        });
+            });
         </script>
     </body>
 </html>
